@@ -1,3 +1,9 @@
+# Remote state backend (per-environment via -backend-config files, e.g. envs/dev.backend.hcl)
+terraform {
+  backend "azurerm" {}
+}
+
+
 # Resource Group (created if not supplied)
 resource "azurerm_resource_group" "rg" {
   count    = local.create_rg ? 1 : 0
