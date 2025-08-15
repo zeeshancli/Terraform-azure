@@ -18,14 +18,12 @@ resource "azurerm_linux_web_app" "app" {
   site_config {
     ftps_state = "Disabled"
 
+    # Map linux_fx (e.g., DOTNET|8.0 or NODE|18-lts) to the appropriate application_stack field
     application_stack {
-      # linux_fx_version is represented as 'linux_fx' in newer providers via nested block, but
-      # azurerm_linux_web_app supports 'application_stack' nested fields (e.g., dotnet_version, node_version)
-      # Here we use the generic 'linux_fx_version' via the top-level attribute for broader compatibility.
+      dotnet_version = upper(split("|", var.linux_fx)[0]) == "DOTNET" ? split("|", var.linux_fx)[1] : null
+      node_version   = upper(split("|", var.linux_fx)[0]) == "NODE"   ? split("|", var.linux_fx)[1] : null
     }
   }
-
-  linux_fx_version = var.linux_fx
 
   public_network_access_enabled = var.network_mode == "private_endpoint" ? false : true
 
@@ -37,9 +35,6 @@ resource "azurerm_linux_web_app" "app" {
       name                      = "allow-appgw-subnet"
       action                    = "Allow"
       priority                  = 100
-      service_tag               = null
-      headers                   = []
-      ip_address                = null
       virtual_network_subnet_id = var.appgw_subnet_id
     }
   }
@@ -58,22 +53,20 @@ resource "azurerm_linux_web_app" "app" {
   dynamic "ip_restriction" {
     for_each = var.network_mode == "service_endpoint" ? [1] : []
     content {
-      name         = "deny-all"
-      action       = "Deny"
-      priority     = 65000
-      ip_address   = "0.0.0.0/0"
-      service_tag  = null
-      headers      = []
+      name     = "deny-all"
+      action   = "Deny"
+      priority = 65000
+      ip_address = "0.0.0.0/0"
     }
   }
 
   dynamic "scm_ip_restriction" {
     for_each = var.network_mode == "service_endpoint" ? [1] : []
     content {
-      name         = "deny-all-scm"
-      action       = "Deny"
-      priority     = 65000
-      ip_address   = "0.0.0.0/0"
+      name     = "deny-all-scm"
+      action   = "Deny"
+      priority = 65000
+      ip_address = "0.0.0.0/0"
     }
   }
 }

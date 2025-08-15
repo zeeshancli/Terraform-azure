@@ -37,11 +37,11 @@ resource "azurerm_network_security_group" "pe" {
 }
 
 resource "azurerm_subnet" "pe" {
-  name                                           = "${var.name_prefix}-snet-pe"
-  resource_group_name                            = var.resource_group_name
-  virtual_network_name                           = azurerm_virtual_network.vnet.name
-  address_prefixes                                = var.subnet_prefixes.private_endpoints
-  private_endpoint_network_policies_enabled      = false
+  name                          = "${var.name_prefix}-snet-pe"
+  resource_group_name           = var.resource_group_name
+  virtual_network_name          = azurerm_virtual_network.vnet.name
+  address_prefixes              = var.subnet_prefixes.private_endpoints
+  private_endpoint_network_policies = "Disabled"
 }
 
 resource "azurerm_subnet_network_security_group_association" "pe" {
