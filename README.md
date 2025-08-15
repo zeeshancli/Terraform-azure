@@ -1,6 +1,6 @@
 # Azure Terraform Modular Repository
 
-This repository provisions a simple, modular Azure application stack designed for reusability across environments (dev, test, prod). The solution is intentionally scoped so a single engineer can build, understand, and deploy it within two days.
+This repository provisions a simple, modular Azure application stack designed for reusability across environments (dev, test, prod).
 
 What it deploys:
 - Network module: VNet, subnets, and NSGs
