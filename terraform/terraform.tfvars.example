@@ -1,0 +1,31 @@
+org_prefix   = "acme"
+environment  = "dev"
+location     = "eastus"
+
+address_space = ["10.40.0.0/16"]
+
+subnet_prefixes = {
+  appgw             = ["10.40.0.0/24"]
+  private_endpoints = ["10.40.1.0/24"]
+  app               = ["10.40.2.0/24"]
+  data              = ["10.40.3.0/24"]
+}
+
+# Choose per-environment
+webapp_network_mode = "private_endpoint"   # or "service_endpoint"
+sql_network_mode    = "private_endpoint"   # or "service_endpoint"
+
+webapp_settings = {
+  ASPNETCORE_ENVIRONMENT = "Development"
+  WEBSITES_PORT          = "8080"
+}
+
+webapp_sku = "P1v3"
+
+webapp_stack = {
+  kind     = "linux"
+  linux_fx = "DOTNET|8.0"
+}
+
+sql_admin_login    = "sqladminuser"
+sql_admin_password = "P@ssw0rd-ChangeMe!"
